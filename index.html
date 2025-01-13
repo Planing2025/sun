@@ -121,6 +121,31 @@
             <span>التوقيع: ...................................................</span>
         </div>
     </div>
-   
+    <div style="text-align: center;">
+        <button class="btn" onclick="downloadAsImage()">تحميل كصورة</button>
+        <button class="btn" onclick="downloadAsPDF()">تحميل كملف PDF</button>
+    </div>
+    <script>
+        function downloadAsImage() {
+            const form = document.getElementById("form");
+            html2canvas(form).then(canvas => {
+                const link = document.createElement("a");
+                link.download = "form-image.png";
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+            });
+        }
+
+        async function downloadAsPDF() {
+            const { jsPDF } = window.jspdf;
+            const form = document.getElementById("form");
+            html2canvas(form).then(canvas => {
+                const imgData = canvas.toDataURL("image/png");
+                const pdf = new jsPDF("p", "mm", "a4");
+                pdf.addImage(imgData, "PNG", 0, 0, 210, 297);
+                pdf.save("form.pdf");
+            });
+        }
+    </script>
 </body>
 </html>
