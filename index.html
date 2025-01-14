@@ -1,95 +1,175 @@
-<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>استمارة جمع المعلومات</title>
-  <style>
-    /* (التصميم كما هو) */
-  </style>
-</head>
-<body>
-  <div class="form-container" id="formContainer">
-    <div class="form-header">
-      <h1>كلية طب الاسنان / جامعة البصرة</h1>
-    </div>
-    <form id="studentForm">
-      <div class="question">
-        <label for="fullName">الاسم الثلاثي</label>
-        <input type="text" id="fullName" name="fullName" placeholder="اكتب الاسم الثلاثي" required="">
-      </div>
-      <div class="question">
-        <label for="degree">الشهادة</label>
-        <select id="degree" name="degree" required="">
-          <option value="" disabled="" selected="">اختر الشهادة</option>
-          <option value="اعدادية">اعدادية</option>
-          <option value="بكالوريوس">بكالوريوس</option>
-          <option value="دبلوم">دبلوم</option>
-          <option value="ماجستير">ماجستير</option>
-          <option value="دكتوراه">دكتوراه</option>
-        </select>
-      </div>
-      <div class="question">
-        <label for="branch">الاختصاص</label>
-        <input type="text" id="branch" name="branch" placeholder="اكتب الاختصاص" required="">
-      </div>
-      <div class="question">
-        <label for="workPlace">مكان العمل</label>
-        <input type="text" id="workPlace" name="workPlace" placeholder="اكتب مكان العمل" required="">
-      </div>
-      <div class="question">
-        <label for="phoneNumber">رقم الهاتف</label>
-        <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="اكتب رقم الهاتف" required="">
-      </div>
-      <div class="question">
-        <label for="email">البريد الإلكتروني</label>
-        <input type="email" id="email" name="email" placeholder="اكتب البريد الإلكتروني" required="">
-      </div>
-      <button type="button" onclick="submitData()">إرسال البيانات</button>
-    </form>
-  </div>
-
-  <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwLYEQCF3t3iZIe-yb01F3LPNE4Gu4JYLfOpQags8C5NqZa7FlEBugh1L-SQ34tYwk76Q/exec'; // استبدل برابط Google Apps Script الصحيح
-
-    function submitData() {
-        const data = {
-            fullName: document.getElementById('fullName').value,
-            degree: document.getElementById('degree').value,
-            branch: document.getElementById('branch').value,
-            workPlace: document.getElementById('workPlace').value,
-            phoneNumber: document.getElementById('phoneNumber').value,
-            email: document.getElementById('email').value,
-        };
-
-        // التحقق من أن جميع الحقول ممتلئة
-        if (!data.fullName || !data.degree || !data.branch || !data.workPlace || !data.phoneNumber || !data.email) {
-            alert('يرجى ملء جميع الحقول المطلوبة.');
-            return;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>استمارة جمع المعلومات</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f9fc;
+            margin: 0;
+            padding: 0;
+            direction: rtl;
+        }
+        .form-container {
+            width: 420px; /* A5 width in pixels at 96 DPI */
+            height: 595px; /* A5 height in pixels at 96 DPI */
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border: 1px solid #4682b4;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
         }
 
-        // إرسال البيانات إلى Google Apps Script
-        fetch(scriptURL, {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        .then(response => response.json())
-        .then(result => {
-            if (result.status === 'success') {
-                alert('تم إرسال البيانات بنجاح.');
-                document.getElementById('studentForm').reset(); // إعادة تعيين النموذج بعد الإرسال
-            } else {
-                alert('حدث خطأ أثناء إرسال البيانات: ' + result.message);
+        /* إضافة صورة مائية في الخلفية */
+        .form-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://drive.google.com/file/d/1s0eF3BZPVNqVS_1WgFfHPgIIKzi-227v/view?usp=sharing') center center no-repeat;
+            opacity: 0.1; /* تغيير الشفافية حسب الحاجة */
+            pointer-events: none; /* عدم التأثير على التفاعل مع العناصر */
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #005b99;
+        }
+        .form-header h1 {
+            margin: 0;
+            font-size: 1.8em;
+        }
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+            text-align: right;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+            text-align: center;
+        }
+        .question {
+            border: 1px solid #4682b4;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #e6f7ff;
+        }
+        button {
+            background-color: #4682b4;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            display: block;
+            margin: auto;
+        }
+        button:hover {
+            background-color: #005b99;
+        }
+        .signature {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ccc;
+        }
+        .signature p {
+            font-size: 1.2em;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container" id="formContainer">
+        <div class="form-header">
+            <h1>كلية طب الاسنان / جامعة البصرة</h1>
+        </div>
+        <form id="studentForm" novalidate="">
+            <div class="question">
+                <label for="fullName">الاسم الثلاثي</label>
+                <input type="text" id="fullName" name="fullName" placeholder="اكتب الاسم الثلاثي" required="">
+            </div>
+            <div class="question">
+                <label for="degree">الشهادة</label>
+                <select id="degree" name="degree" required="">
+                    <option value="" disabled="" selected="">اختر الشهادة</option>
+                    <option value="اعدادية">اعدادية</option>
+                    <option value="بكالوريوس">بكالوريوس</option>
+                    <option value="دبلوم">دبلوم</option>
+                    <option value="ماجستير">ماجستير</option>
+                    <option value="دكتوراه">دكتوراه</option>
+                </select>
+            </div>
+            <div class="question">
+                <label for="branch">الاختصاص</label>
+                <input type="text" id="branch" name="branch" placeholder="اكتب الاختصاص" required="">
+            </div>
+            <div class="question">
+                <label for="workPlace">مكان العمل</label>
+                <input type="text" id="workPlace" name="workPlace" placeholder="اكتب مكان العمل" required="">
+            </div>
+            <div class="question">
+                <label for="phoneNumber">رقم الهاتف</label>
+                <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="اكتب رقم الهاتف" required="">
+            </div>
+            <div class="question">
+                <label for="email">البريد الإلكتروني</label>
+                <input type="email" id="email" name="email" placeholder="اكتب البريد الإلكتروني" required="">
+            </div>
+            <button type="button" onclick="generateImage()">تحميل كصورة JPG</button>
+        </form>
+        <div class="signature">
+            <p>التوقيع:</p>
+        </div>
+    </div>
+
+    <script>
+        function generateImage() {
+            const form = document.getElementById('studentForm');
+
+            // التحقق من صحة الحقول
+            if (!form.checkValidity()) {
+                alert('يرجى ملء جميع الحقول المطلوبة.');
+                return;
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('حدث خطأ أثناء الاتصال بالخادم.');
-        });
-    }
-  </script>
+
+            const element = document.getElementById('formContainer');
+            const button = document.querySelector('button');
+
+            // إخفاء الزر قبل الالتقاط
+            button.style.display = 'none';
+
+            html2canvas(element, {
+                width: 420,  // عرض A5
+                height: 595, // ارتفاع A5
+                scale: 2     // لتحسين جودة الصورة
+            }).then(canvas => {
+                // إعادة إظهار الزر بعد الالتقاط
+                button.style.display = 'block';
+
+                const link = document.createElement('a');
+                link.download = 'student_info.jpg';
+                link.href = canvas.toDataURL('image/jpeg', 1.0);
+                link.click();
+            });
+        }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </body>
 </html>
