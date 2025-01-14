@@ -6,186 +6,111 @@
     <title>استمارة جمع المعلومات</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, sans-serif;
             background-color: #f7f9fc;
             margin: 0;
             padding: 0;
             direction: rtl;
         }
         .form-container {
-            width: 794px; /* A4 width in pixels at 96 DPI */
-            height: 1123px; /* A4 height in pixels at 96 DPI */
-            margin: 0 auto;
+            max-width: 600px;
+            margin: 20px auto;
             background: #fff;
             padding: 20px;
             border: 1px solid #4682b4;
-            box-sizing: border-box;
-            overflow: hidden;
-        }
-        .form-header {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #005b99;
-        }
-        .form-header h1 {
-            margin: 0;
-            font-size: 1.8em;
+            border-radius: 8px;
         }
         label {
-            font-weight: bold;
-            margin-top: 10px;
             display: block;
-            text-align: right;
+            margin-bottom: 5px;
+            font-weight: bold;
         }
-        input, select, textarea {
+        input, select {
             width: 100%;
             padding: 10px;
-            margin-top: 5px;
             margin-bottom: 15px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            font-size: 1em;
-            text-align: center;
-        }
-        .question {
-            border: 1px solid #4682b4;
-            border-radius: 5px;
-            padding: 15px;
-            margin-bottom: 20px;
-            background-color: #e6f7ff;
         }
         button {
+            width: 100%;
+            padding: 10px;
             background-color: #4682b4;
-            color: white;
-            padding: 10px 20px;
+            color: #fff;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 1em;
-            display: block;
-            margin: auto;
         }
         button:hover {
             background-color: #005b99;
         }
-        .signature {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #ccc;
-        }
-        .signature p {
-            font-size: 1.2em;
-            color: #333;
-        }
     </style>
 </head>
 <body>
-    <div class="form-container" id="formContainer">
-        <div class="form-header">
-            <h1>كلية طب الاسنان / جامعة البصرة</h1>
-        </div>
-        <form id="studentForm" novalidate="">
-            <div class="question">
-                <label for="fullName">الاسم الثلاثي</label>
-                <input type="text" id="fullName" name="fullName" placeholder="اكتب الاسم الثلاثي" required="">
-            </div>
-            <div class="question">
-                <label for="degree">الشهادة</label>
-                <select id="degree" name="degree" required="">
-                    <option value="" disabled="" selected="">اختر الشهادة</option>
-                    <option value="اعدادية">اعدادية</option>
-                    <option value="بكالوريوس">بكالوريوس</option>
-                    <option value="دبلوم">دبلوم</option>
-                    <option value="ماجستير">ماجستير</option>
-                    <option value="دكتوراه">دكتوراه</option>
-                </select>
-            </div>
-            <div class="question">
-                <label for="branch">الاختصاص</label>
-                <input type="text" id="branch" name="branch" placeholder="اكتب الاختصاص" required="">
-            </div>
-            <div class="question">
-                <label for="workPlace">مكان العمل</label>
-                <input type="text" id="workPlace" name="workPlace" placeholder="اكتب مكان العمل" required="">
-            </div>
-            <div class="question">
-                <label for="phoneNumber">رقم الهاتف</label>
-                <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="اكتب رقم الهاتف" required="">
-            </div>
-            <div class="question">
-                <label for="email">البريد الإلكتروني</label>
-                <input type="email" id="email" name="email" placeholder="اكتب البريد الإلكتروني" required="">
-            </div>
-            <button type="button" onclick="handleFormSubmission()">تحميل كصورة وإرسال البيانات</button>
+    <div class="form-container">
+        <h2>استمارة جمع المعلومات</h2>
+        <form id="dataForm">
+            <label for="fullName">الاسم الثلاثي</label>
+            <input type="text" id="fullName" required>
+
+            <label for="degree">الشهادة</label>
+            <select id="degree" required>
+                <option value="" disabled selected>اختر الشهادة</option>
+                <option value="اعدادية">اعدادية</option>
+                <option value="بكالوريوس">بكالوريوس</option>
+                <option value="دبلوم">دبلوم</option>
+                <option value="ماجستير">ماجستير</option>
+                <option value="دكتوراه">دكتوراه</option>
+            </select>
+
+            <label for="branch">الاختصاص</label>
+            <input type="text" id="branch" required>
+
+            <label for="workPlace">مكان العمل</label>
+            <input type="text" id="workPlace" required>
+
+            <label for="phoneNumber">رقم الهاتف</label>
+            <input type="tel" id="phoneNumber" required>
+
+            <label for="email">البريد الإلكتروني</label>
+            <input type="email" id="email" required>
+
+            <button type="button" onclick="submitData()">إرسال البيانات</button>
         </form>
-        <div class="signature">
-            <p>التوقيع:</p>
-        </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
-        function sendDataToGoogleSheet(data) {
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbzPb45xg7v7SZMz2Hj8wFF-Ls1zLUv5pbZwZr1v1FNB5sRKZMpVXuB07Msz_212lr6K-w/exec'; // استبدل بعنوان Google Apps Script الخاص بك
-            return fetch(scriptURL, {
-                method: 'POST',
-                body: JSON.stringify(data),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-            .then(response => response.json());
-        }
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwLYEQCF3t3iZIe-yb01F3LPNE4Gu4JYLfOpQags8C5NqZa7FlEBugh1L-SQ34tYwk76Q/exec'; // استبدل بـرابط Google Apps Script الخاص بك
 
-        function generateImage() {
-            const element = document.getElementById('formContainer');
-            const button = document.querySelector('button');
-            button.style.display = 'none';
-
-            return html2canvas(element, {
-                width: 794,
-                height: 1123,
-                scale: 2,
-            }).then(canvas => {
-                button.style.display = 'block';
-                const link = document.createElement('a');
-                link.download = 'student_info.jpg';
-                link.href = canvas.toDataURL('image/jpeg', 1.0);
-                link.click();
-            });
-        }
-
-        function handleFormSubmission() {
-            const form = document.getElementById('studentForm');
-
-            if (!form.checkValidity()) {
-                alert('يرجى ملء جميع الحقول المطلوبة.');
-                return;
-            }
-
+        function submitData() {
             const data = {
                 fullName: document.getElementById('fullName').value,
                 degree: document.getElementById('degree').value,
                 branch: document.getElementById('branch').value,
                 workPlace: document.getElementById('workPlace').value,
                 phoneNumber: document.getElementById('phoneNumber').value,
-                email: document.getElementById('email').value,
+                email: document.getElementById('email').value
             };
 
-            sendDataToGoogleSheet(data)
-                .then(result => {
-                    if (result.status === 'success') {
-                        alert('تم إرسال البيانات بنجاح.');
-                        return generateImage();
-                    } else {
-                        alert('حدث خطأ أثناء إرسال البيانات.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('حدث خطأ أثناء الاتصال بالسيرفر.');
-                });
+            fetch(scriptURL, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.status === 'success') {
+                    alert('تم إرسال البيانات بنجاح.');
+                } else {
+                    alert('حدث خطأ أثناء إرسال البيانات: ' + result.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('حدث خطأ أثناء الاتصال بالخادم.');
+            });
         }
     </script>
 </body>
